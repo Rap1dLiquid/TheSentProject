@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt 3</title>
+    <script type="module" src="chatbox.js">
+    </script>
+    <!--
+    Prompt:
+    ChatBox.
+    1.Build a chatbox Element
+    -->
+    <style>
+        .chatbox{
+            height:40vw;
+            width:40vw;
+            background-color: transparent;
+            border: 2px black solid;
+            display: flex;
+            flex-direction: column;
+            margin-left:50%;
+            transform:translateX(-50%);
+         
+
+        }
+        .chat{
+            font-family: Arial, Helvetica, sans-serif;
+            margin:0;
+        }
+        .msgBarDiv{
+            position:fixed;
+            margin-left:50%;
+            bottom:5%;
+            transform:translateX(-50%);
+            height:30px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:20px;
+        }
+        .msgBar,.enter{
+             height:30px;
+              font-size:20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="msgBarDiv">
+        <input type="text" class="nameBar" placeholder="Type in your Name!">
+        <input type="text" class="msgBar" placeholder="Type in your Message!"><!-- This is where you type your message-->
+        <button class="enter">Enter!</button><!-- To Enter Message to the database-->
+    </div>
+    <div class="chatboxDiv">
+        <chatbox class="chatbox">
+            <chat class="chat">Ello (this is a msg template)</chat>
+        </chatbox>
+    </div>
+    
+    
+    
+</body>
+</html>
