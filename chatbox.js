@@ -1,6 +1,6 @@
 //Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getDatabase, ref, set,get,child,update,remove   } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+import { getDatabase,onChildAdded, onValue, ref, set,get,child,update,remove   } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
 // Boilerplate Variables
 const firebaseConfig = {
@@ -38,9 +38,10 @@ function addData(name, message) {
     set(dbRef, {//                            but better use Timestamp so it's Absolute.
         username: name,
         message: message,
-        time:new Date(new Date().getTime()).toString() ,
+        time:`${new Date(new Date().getTime())}` ,
     })
 }
+
 
 
 function addItemsToList(name,message){
@@ -54,7 +55,7 @@ function addItemsToList(name,message){
     nameNMsg.innerHTML = `${name} : ${message}`
     
     
-    chatboxFunc.appendChild(nameNMsg);
+    chatboxFunc.prepend(nameNMsg);
 }
 
 function FetchAllData() {
@@ -69,7 +70,6 @@ function FetchAllData() {
                 addItemsToList(
                     data.username,
                     data.message,
-                    
                 );
             });
         } else {
@@ -77,9 +77,37 @@ function FetchAllData() {
         }
     }).catch(err => console.error(err));
 }
-setInterval(() => { chatbox.innerHTML = '';FetchAllData();},1000)
+
 document.querySelector(".enter").addEventListener('click', ()=>{
-  addData(namebar.value || "Anon",messageEl.value)
+  addData(namebar.value || "Anonymous" ,messageEl.value)
 })
+document.addEventListener('keydown', (event)=>{
+    if(event.key ==='Enter'){
+        event.preventDefault();
+        console.log("key pressed")
+        addData(namebar.value || "Anonymous" ,messageEl.value)
+    }
+} )
+const dataRef = ref(db, "chatbox");
+chatbox.innerHTML=''
+FetchAllData()
+
+
+let initialLoad = true;
+
+onChildAdded(dataRef, (snapshot) => {
+    if (initialLoad) return; // ignore history
+
+    
+    console.log("NEW DATA ADDED:", snapshot.key, snapshot.val());
+    chatbox.innerHTML = '';FetchAllData()
+;
+});
+
+onValue(dataRef, () => {
+    initialLoad = false;
+}, { onlyOnce: true }); 
+
+
 
 
